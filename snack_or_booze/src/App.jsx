@@ -27,7 +27,7 @@ function App() {
       setIsLoading(false);
     }
     getAll();
-  }, []);
+  }, [numSnacks, numDrinks]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -75,7 +75,17 @@ function App() {
               path="/drinks/:id"
               element={<Item items={drinks} cantFind="/drinks" />}
             />
-            <Route path="/add" element={<AddForm />} />
+            <Route
+              path="/add"
+              element={
+                <AddForm
+                  setNumSnacks={setNumSnacks}
+                  setSnacks={setSnacks}
+                  setNumDrinks={setNumDrinks}
+                  setDrinks={setDrinks}
+                />
+              }
+            />
             <Route
               path="/*"
               element={

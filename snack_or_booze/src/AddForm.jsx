@@ -1,11 +1,63 @@
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Form, FormGroup, Input, Label, Button } from "reactstrap";
+import SnackOrBoozeApi from "./Api";
 import "./AddForm.css";
 
-function AddForm() {
+function AddForm({ setSnacks, setNumSnacks, setDrinks, setNumDrinks }) {
+  const navigate = useNavigate();
+
+  const INITIAL_STATE = {
+    path: "",
+    id: "",
+    name: "",
+    description: "",
+    recipe: "",
+    serve: "",
+  };
+  const [formData, setFormData] = useState(INITIAL_STATE);
+
+  function processFormData(e) {
+    e.preventDefault();
+    const { target } = e;
+    let data = {
+      path: "/" + target.selectCategory.value.toLowerCase(),
+      id: target.itemName.value.replace(RegExp(/([' '])+/g), "-").toLowerCase(),
+      name: target.itemName.value,
+      description: target.itemDescription.value,
+      recipe: target.itemRecipe.value,
+      serve: target.servingInstructions.value,
+    };
+
+    console.log(data);
+
+    setFormData(data);
+
+    return formData;
+  }
+
+  async function addItem(e) {
+    const data = processFormData(e);
+    const res = await SnackOrBoozeApi.postItem(data);
+    console.log(res);
+
+    if (res) {
+      if (data.path === "/snacks") {
+        let items = await SnackOrBoozeApi.getSnacks();
+        setNumSnacks(items.length);
+        setSnacks(items);
+      } else if (data.path === "/drinks") {
+        let items = await SnackOrBoozeApi.getDrinks();
+        setNumDrinks(items.length);
+        setDrinks(items);
+      }
+      navigate(data.path);
+    }
+  }
+
   return (
     <div>
-      <Form className="form">
+      <Form className="form" onSubmit={(e) => addItem(e)}>
         <FormGroup>
           <Label for="selectCategory">
             Select A Category To Add An Item To
@@ -51,7 +103,7 @@ function AddForm() {
             type="textarea"
           />
         </FormGroup>
-        <Button>Submit</Button>
+        <Button type="submit">Submit</Button>
       </Form>
     </div>
   );

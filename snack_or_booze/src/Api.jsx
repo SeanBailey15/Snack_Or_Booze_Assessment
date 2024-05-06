@@ -19,22 +19,6 @@ class SnackOrBoozeApi {
     }
   }
 
-  static async postSnack(data) {
-    const { id, name, description, recipe, serve } = data;
-    try {
-      const res = await axios.post(`${BASE_API_URL}/snacks`, {
-        id: id,
-        name: name,
-        description: description,
-        recipe: recipe,
-        serve: serve,
-      });
-      return res.data;
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   static async getDrinks() {
     try {
       const result = await axios.get(`${BASE_API_URL}/drinks`);
@@ -44,10 +28,10 @@ class SnackOrBoozeApi {
     }
   }
 
-  static async postDrink(data) {
-    const { id, name, description, recipe, serve } = data;
+  static async postItem(data) {
+    const { path, id, name, description, recipe, serve } = data;
     try {
-      const res = await axios.post(`${BASE_API_URL}/drinks`, {
+      const res = await axios.post(`${BASE_API_URL}${path}`, {
         id: id,
         name: name,
         description: description,
@@ -55,8 +39,8 @@ class SnackOrBoozeApi {
         serve: serve,
       });
       return res.data;
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
     }
   }
 }

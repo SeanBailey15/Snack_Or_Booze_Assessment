@@ -27,6 +27,20 @@
       "description": "Crisp!",
       "recipe": "Open can.",
       "serve": "Immediately."
+    },
+    {
+      "id": "moscow-mule",
+      "name": "Moscow Mule",
+      "description": "It has quite a kick!",
+      "recipe": "Vodka, ginger ale, and lime juice.",
+      "serve": "Serve over ice in a copper stein."
+    },
+    {
+      "id": "screwdriver",
+      "name": "Screwdriver",
+      "description": "Let's get loose!",
+      "recipe": "Orange juice and vodka over ice",
+      "serve": "Give it to someone that needs to loosen up!"
     }
   ],
   "snacks": [
@@ -57,6 +71,13 @@
       "description": "Who doesn't like pizza?",
       "recipe": "Crust, sauce, cheese, toppings. EZ",
       "serve": "Piping hot and watch your friends destroy their mouths."
+    },
+    {
+      "id": "chocolate-chip-cookies",
+      "name": "Chocolate Chip Cookies",
+      "description": "Ooey-gooey classic cookies.",
+      "recipe": "Buy the cookie dough, follow the instructions!",
+      "serve": "Serve warm with a glass of cold milk."
     }
   ]
 }
