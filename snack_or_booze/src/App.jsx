@@ -1,27 +1,36 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SnackOrBoozeApi from "./Api";
 import "./App.css";
 import Home from "./Home";
-import SnackOrBoozeApi from "./Api";
 import NavBar from "./NavBar";
-import Menu from "./FoodMenu";
-import Snack from "./FoodItem";
+import Menu from "./ItemMenu";
+import Item from "./Item";
+import AddForm from "./AddForm";
+import ErrorPage from "./ErrorPage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [snacks, setSnacks] = useState([]);
+  const [numSnacks, setNumSnacks] = useState(0);
+  const [drinks, setDrinks] = useState([]);
+  const [numDrinks, setNumDrinks] = useState(0);
 
   useEffect(() => {
-    async function getSnacks() {
+    async function getAll() {
       let snacks = await SnackOrBoozeApi.getSnacks();
+      let drinks = await SnackOrBoozeApi.getDrinks();
       setSnacks(snacks);
+      setNumSnacks(snacks.length);
+      setDrinks(drinks);
+      setNumDrinks(drinks.length);
       setIsLoading(false);
     }
-    getSnacks();
+    getAll();
   }, []);
 
   if (isLoading) {
-    return <p>Loading &hellip;</p>;
+    return <p>Loading...</p>;
   }
 
   return (
@@ -30,16 +39,52 @@ function App() {
         <NavBar />
         <main>
           <Routes>
-            <Route path="/" element={<Home snacks={snacks} />} />
+            <Route
+              path="/"
+              element={<Home numSnacks={numSnacks} numDrinks={numDrinks} />}
+            />
             <Route
               path="/snacks"
-              element={<Menu snacks={snacks} title="Snacks" />}
+              element={
+                <Menu
+                  items={snacks}
+                  path="/snacks"
+                  title="Snacks"
+                  cardTitle="Food Menu"
+                  cardText="Choose from our savory selection of mouth-watering dishes!"
+                />
+              }
             />
             <Route
               path="/snacks/:id"
-              element={<Snack items={snacks} cantFind="/snacks" />}
+              element={<Item items={snacks} cantFind="/snacks" />}
             />
-            <Route element={<p>Hmmm. I can't seem to find what you want.</p>} />
+            <Route
+              path="/drinks"
+              element={
+                <Menu
+                  items={drinks}
+                  path="/drinks"
+                  title="Drinks"
+                  cardTitle="Drink Menu"
+                  cardText="Whether you're in the mood for a stiff drink, or a soft drink, we've got you covered!"
+                />
+              }
+            />
+            <Route
+              path="/drinks/:id"
+              element={<Item items={drinks} cantFind="/drinks" />}
+            />
+            <Route path="/add" element={<AddForm />} />
+            <Route
+              path="/*"
+              element={
+                <ErrorPage
+                  cardTitle="404 Not Found"
+                  cardText="There seems to be a problem. We cannot find what you're looking for."
+                />
+              }
+            />
           </Routes>
         </main>
       </BrowserRouter>
